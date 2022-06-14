@@ -1,0 +1,46 @@
+
+name: checkpoint.internet_outages
+config_version: 1.0
+template_name:
+module_name: great_expectations.checkpoint
+class_name: Checkpoint
+run_name_template: "%Y%m%d-%H%M%S-my-run-name-template"  # this is used for validation result file name
+batch_request: {}
+evaluation_parameters: {}
+runtime_configuration: {}
+profilers: []
+ge_cloud_id:
+expectation_suite_ge_cloud_id:
+validations:
+  - expectation_suite_name: internet_outages.expectations_suite
+    batch_request:
+      datasource_name: my_bigquery_datasource
+      data_connector_name: default_inferred_data_connector_name
+      data_asset_name: internet_outages.internet_outages_sample
+      data_connector_query:
+        batch_filter_parameters:
+          datetime: "BETWEEN TIMESTAMP('2022-03-28') AND TIMESTAMP('2022-03-29')"
+      # data_asset_name: internet_outages.global_outages_v1
+action_list:
+  - name: store_validation_result
+    action:
+      class_name: StoreValidationResultAction
+  - name: store_evaluation_params
+    action:
+      class_name: StoreEvaluationParametersAction
+  - name: update_data_docs
+    action:
+      class_name: UpdateDataDocsAction
+      site_names:
+        - gs_site
+  - name: send_slack_notification_on_validation_result # name can be set to any value
+    action:
+      class_name: SlackNotificationAction
+      # put the actual bot token in the uncommitted/config_variables.yml file
+      slack_token: ${slack_token}
+      slack_channel: data-monitoring-mvp
+      notify_on: failure # possible values: "all", "failure", "success"
+      notify_with: # optional list containing the DataDocs sites to include in the notification. Defaults to including links to all configured sites.  gcs_site
+      renderer:
+        module_name: great_expectations.render.renderer.slack_renderer
+        class_name: SlackRenderer

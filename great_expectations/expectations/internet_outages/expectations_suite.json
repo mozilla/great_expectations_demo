@@ -1,0 +1,88 @@
+{
+  "data_asset_type": "Dataset",
+  "expectation_suite_name": "test",
+  "expectations": [
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "datetime"
+      },
+      "meta": {
+        "notes": {
+          "content": "Ensure datetime is not null",
+          "format": "markdown",
+          "tier": "tier_1"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "country"
+      },
+      "meta": {
+        "notes": {
+          "content": "Ensure country is not null",
+          "format": "markdown",
+          "tier": "tier_1"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "city"
+      },
+      "meta": {
+        "notes": {
+          "content": "Ensure city is not null",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_value_lengths_to_equal",
+      "kwargs": {
+        "column": "country",
+        "value": 2
+      },
+      "meta": {
+        "notes": {
+          "content": "Check country field is unique",
+          "format": "markdown",
+          "tier": "tier_2"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_compound_columns_to_be_unique",
+      "kwargs": {
+        "column_list": ["datetime", "country", "city"]
+      },
+      "meta": {
+        "notes": {
+          "content": "Check that the datetime, country, city combination is unique",
+          "format": "markdown",
+          "tier": "tier_2"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_table_row_count_to_be_between",
+      "kwargs": {
+        "min_value": 30000
+      },
+      "meta": {
+        "notes": {
+          "content": "Check that the datetime, country, city combination is unique",
+          "format": "markdown",
+          "tier": "tier_1"
+        }
+      }
+    }
+   ],
+  "ge_cloud_id": null,
+  "meta": {
+    "great_expectations_version": "0.14.10"
+  }
+}
