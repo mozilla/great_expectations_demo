@@ -1,6 +1,6 @@
 {
   "data_asset_type": "Dataset",
-  "expectation_suite_name": "test",
+  "expectation_suite_name": "internet_outages",
   "expectations": [
     {
       "expectation_type": "expect_column_values_to_not_be_null",
@@ -10,8 +10,7 @@
       "meta": {
         "notes": {
           "content": "Ensure datetime is not null",
-          "format": "markdown",
-          "tier": "tier_1"
+          "format": "markdown"
         }
       }
     },
@@ -23,8 +22,7 @@
       "meta": {
         "notes": {
           "content": "Ensure country is not null",
-          "format": "markdown",
-          "tier": "tier_1"
+          "format": "markdown"
         }
       }
     },
@@ -49,8 +47,7 @@
       "meta": {
         "notes": {
           "content": "Check country field is unique",
-          "format": "markdown",
-          "tier": "tier_2"
+          "format": "markdown"
         }
       }
     },
@@ -62,8 +59,7 @@
       "meta": {
         "notes": {
           "content": "Check that the datetime, country, city combination is unique",
-          "format": "markdown",
-          "tier": "tier_2"
+          "format": "markdown"
         }
       }
     },
@@ -75,14 +71,13 @@
       "meta": {
         "notes": {
           "content": "Check that the datetime, country, city combination is unique",
-          "format": "markdown",
-          "tier": "tier_1"
+          "format": "markdown"
         }
       }
     }
    ],
   "ge_cloud_id": null,
   "meta": {
-    "great_expectations_version": "0.14.10"
+    "great_expectations_version": "0.15.8"
   }
 }

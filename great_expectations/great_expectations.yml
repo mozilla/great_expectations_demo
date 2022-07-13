@@ -14,13 +14,12 @@ config_version: 3.0
 # You can use the CLI command `great_expectations datasource new` to help you
 # add a new datasource. Read more at https://docs.greatexpectations.io/docs/guides/connecting_to_your_data/connect_to_data_overview
 datasources:
-  my_bigquery_datasource:
+  bq-telemetry-derived:
     execution_engine:
-      connection_string: bigquery://data-monitoring-dev/internet_outages?credentials_path=great_expectations/uncommitted/ge_sa.json
+      connection_string: ${bq_conn}
       class_name: SqlAlchemyExecutionEngine
-      module_name: great_expectations.execution_engine
       # class_name: SimpleSqlalchemyDatasource  # https://greatexpectationstalk.slack.com/archives/CUTCNHN82/p1649876636372869?thread_ts=1643632876.707679&cid=CUTCNHN82
-      # module_name: great_expectations.datasource
+      module_name: great_expectations.execution_engine
       introspection:
         whole_table:
           include_schema_name: True
@@ -31,6 +30,7 @@ datasources:
         module_name: great_expectations.datasource.data_connector
         batch_identifiers:
           - default_identifier_name
+          - date_partition
       default_inferred_data_connector_name:
         class_name: InferredAssetSqlDataConnector
         include_schema_name: true
@@ -80,8 +80,8 @@ stores:
     store_backend:
       class_name: TupleGCSStoreBackend
       project: data-monitoring-mvp
-      bucket: ge_data_store_v1
-      prefix: expectations/
+      bucket: ge_data_store_${REPO}
+      prefix: expectations
 
   validations_store:
     class_name: ValidationsStore
@@ -94,8 +94,8 @@ stores:
     store_backend:
       class_name: TupleGCSStoreBackend
       project: data-monitoring-mvp
-      bucket: ge_data_store_v1
-      prefix: validations/
+      bucket: ge_data_store_${REPO}
+      prefix: validations
 
   evaluation_parameter_store:
     # Evaluation Parameters enable dynamic expectations. Read more here:
@@ -114,8 +114,8 @@ stores:
     store_backend:
       class_name: TupleGCSStoreBackend
       project: data-monitoring-mvp
-      bucket: ge_data_store_v1
-      prefix: checkpoint/
+      bucket: ge_data_store_${REPO}
+      prefix: checkpoint
 
   profiler_store:
     class_name: ProfilerStore
@@ -124,7 +124,7 @@ stores:
       suppress_store_backend_id: true
       base_directory: profilers/
 
-expectations_store_name: expectations_store
+expectations_store_name: expectations_GCS_store
 validations_store_name: validations_store
 evaluation_parameter_store_name: evaluation_parameter_store
 checkpoint_store_name: checkpoint_store
@@ -137,7 +137,7 @@ data_docs_sites:
   local_site:
     class_name: SiteBuilder
     # set to false to hide how-to buttons in Data Docs
-    show_how_to_buttons: true
+    show_how_to_buttons: false
     store_backend:
       class_name: TupleFilesystemStoreBackend
       base_directory: uncommitted/data_docs/local_site/
@@ -154,5 +154,5 @@ data_docs_sites:
 
 anonymous_usage_statistics:
   data_context_id: acf5baf5-7581-40fd-92d4-a8f88eba45d5
-  enabled: true
+  enabled: false
 notebooks:

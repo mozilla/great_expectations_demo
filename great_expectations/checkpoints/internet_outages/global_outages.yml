@@ -1,26 +1,34 @@
 
-name: checkpoint.internet_outages
+name: checkpoint.internet_outages.global_outages
 config_version: 1.0
 template_name:
 module_name: great_expectations.checkpoint
 class_name: Checkpoint
-run_name_template: "%Y%m%d-%H%M%S-my-run-name-template"  # this is used for validation result file name
-batch_request: {}
+run_name_template: "${_date_partition}-global_outages"  # this is used for validation result file name
+# batch_request: {}
 evaluation_parameters: {}
-runtime_configuration: {}
+runtime_configuration:
+# runtime_parameters: {}
 profilers: []
 ge_cloud_id:
 expectation_suite_ge_cloud_id:
 validations:
-  - expectation_suite_name: internet_outages.expectations_suite
+  - expectation_suite_name: internet_outages.global_outages.expectations_suite
     batch_request:
-      datasource_name: my_bigquery_datasource
-      data_connector_name: default_inferred_data_connector_name
-      data_asset_name: internet_outages.internet_outages_sample
-      data_connector_query:
-        batch_filter_parameters:
-          datetime: "BETWEEN TIMESTAMP('2022-03-28') AND TIMESTAMP('2022-03-29')"
-      # data_asset_name: internet_outages.global_outages_v1
+      datasource_name: bq-telemetry-derived
+      data_connector_name: default_runtime_data_connector_name
+      data_asset_name: internet_outages.global_outages_v1
+      runtime_parameters:
+        # looks like this way we could force per partition operation
+        query: |
+          SELECT
+            datetime,
+            country,
+            city,
+          FROM `moz-fx-data-shared-prod.internet_outages.global_outages_v1` WHERE DATE(datetime) = DATE('$_date_partition')
+      batch_identifiers:
+        default_identifier_name: shrug
+        date_partition: $_date_partition
 action_list:
   - name: store_validation_result
     action:
@@ -33,10 +41,9 @@ action_list:
       class_name: UpdateDataDocsAction
       site_names:
         - gs_site
-  - name: send_slack_notification_on_validation_result # name can be set to any value
+  - name: send_slack_notification_on_validation_result
     action:
       class_name: SlackNotificationAction
-      # put the actual bot token in the uncommitted/config_variables.yml file
       slack_token: ${slack_token}
       slack_channel: data-monitoring-mvp
       notify_on: failure # possible values: "all", "failure", "success"

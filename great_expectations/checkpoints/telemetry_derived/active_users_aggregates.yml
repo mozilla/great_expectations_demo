@@ -1,0 +1,70 @@
+
+name: checkpoint.telemetry_derived.active_users_aggregates
+config_version: 1.0
+template_name:
+module_name: great_expectations.checkpoint
+class_name: Checkpoint
+run_name_template: "${_date_partition}-active_users_aggregates"  # this is used for validation result file name
+# batch_request: {}
+evaluation_parameters: {}
+runtime_configuration:
+# runtime_parameters: {}
+profilers: []
+ge_cloud_id:
+expectation_suite_ge_cloud_id:
+validations:
+  - expectation_suite_name: telemetry_derived.active_users_aggregates.expectations_suite
+    batch_request:
+      datasource_name: bq-telemetry-derived
+      data_connector_name: default_runtime_data_connector_name
+      data_asset_name: telemetry_derived.active_users_aggregates_v1
+      runtime_parameters:
+        # looks like this way we could force per partition operation
+        query: |
+          SELECT
+            submission_date,
+            first_seen_year,
+            os_version,
+            os_version_major,
+            os_version_minor,
+            distribution_id,
+            country,
+            city,
+            app_name,
+            app_version,
+            channel,
+            segment,
+            os,
+            dau,
+            wau,
+            mau,
+            is_default_browser,
+            attribution_medium,
+            attribution_source,
+            attributed,
+            language_name,
+          FROM `moz-fx-data-shared-prod.telemetry_derived.active_users_aggregates_v1` WHERE DATE(submission_date) = DATE('$_date_partition')
+      batch_identifiers:
+        date_partition: $_date_partition
+action_list:
+  - name: store_validation_result
+    action:
+      class_name: StoreValidationResultAction
+  - name: store_evaluation_params
+    action:
+      class_name: StoreEvaluationParametersAction
+  - name: update_data_docs
+    action:
+      class_name: UpdateDataDocsAction
+      site_names:
+        - gs_site
+  - name: send_slack_notification_on_validation_result
+    action:
+      class_name: SlackNotificationAction
+      slack_token: ${slack_token}
+      slack_channel: data-monitoring-mvp
+      notify_on: failure # possible values: "all", "failure", "success"
+      notify_with: # optional list containing the DataDocs sites to include in the notification. Defaults to including links to all configured sites.  gcs_site
+      renderer:
+        module_name: great_expectations.render.renderer.slack_renderer
+        class_name: SlackRenderer

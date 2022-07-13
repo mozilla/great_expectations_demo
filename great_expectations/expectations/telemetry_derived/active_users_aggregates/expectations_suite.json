@@ -1,0 +1,230 @@
+{
+  "data_asset_type": "Dataset",
+  "expectation_suite_name": "active_users_aggregates",
+  "expectations": [
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "submission_date"
+      },
+      "meta": {
+        "notes": {
+          "content": "Ensure the field does not contain nulls",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "first_seen_year"
+      },
+      "meta": {
+        "notes": {
+          "content": "Ensure the field does not contain nulls",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "os_version_major"
+      },
+      "meta": {
+        "notes": {
+          "content": "Ensure os_version_major is not null",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "os_version_minor"
+      },
+      "meta": {
+        "notes": {
+          "content": "Ensure os_version_minor is not null",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_not_be_null",
+      "kwargs": {
+        "column": "is_default_browser"
+      },
+      "meta": {
+        "notes": {
+          "content": "Ensure the field does not contain nulls",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_value_lengths_to_equal",
+      "kwargs": {
+        "column": "country",
+        "value": 2
+      },
+      "meta": {
+        "notes": {
+          "content": "Check country field is 2 characters long",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_distinct_values_to_be_in_set",
+      "kwargs": {
+        "column": "segment",
+        "value_set": ["casual_user", "infrequent_user", "core_user", "regular_user", "other"]
+      },
+      "meta": {
+        "notes": {
+          "content": "Check segment values is either casual_user or infrequent user",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_values_to_be_between",
+      "kwargs": {
+        "column": "first_seen_year",
+        "min_value": 2016,
+        "max_value": 2030
+      },
+      "meta": {
+        "notes": {
+          "content": "Check segment values is either casual_user or infrequent user",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_distinct_values_to_be_in_set",
+      "kwargs": {
+        "column": "app_name",
+        "value_set": ["Fenix", "Focus Android", "Firefox iOS", "Focus iOS", "Fenix BrowserStack", "Firefox Desktop", "Firefox iOS BrowserStack"]
+      },
+      "meta": {
+        "notes": {
+          "content": "Check segment values is either casual_user or infrequent user",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_distinct_values_to_be_in_set",
+      "kwargs": {
+        "column": "channel",
+        "value_set": ["beta", "release", "nightly", "Other", "aurora", "esr"]
+      },
+      "meta": {
+        "notes": {
+          "content": "Check channel values is either beta, release or nightly",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_distinct_values_to_be_in_set",
+      "kwargs": {
+        "column": "os",
+        "value_set": ["Windows_NT", "Darwin", "Windows_95", "Linux", "Android", "iOS", "OpenBSD", "Windows_98", "FreeBSD"]
+      },
+      "meta": {
+        "notes": {
+          "content": "Check os value is one of the expected",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_compound_columns_to_be_unique",
+      "kwargs": {
+        "column_list": [
+          "submission_date",
+          "segment",
+          "country",
+          "city",
+          "app_name",
+          "channel",
+          "os",
+          "os_version",
+          "app_version",
+          "distribution_id",
+          "is_default_browser",
+          "attribution_medium",
+          "attribution_source",
+          "attributed",
+          "language_name",
+          "first_seen_year"
+        ]
+      },
+      "meta": {
+        "notes": {
+          "content": "Check that the datetime, country, city combination is unique",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_table_row_count_to_be_between",
+      "kwargs": {
+        "min_value": 6000000,
+        "max_value": 60000000
+      },
+      "meta": {
+        "notes": {
+          "content": "Partition with the lowest number of entries has ~7000000 rows, we should be seeing at least that",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_sum_to_be_between",
+      "kwargs": {
+        "column": "dau",
+        "min_value": 80000000
+      },
+      "meta": {
+        "notes": {
+          "content": "Columns sum should be above certain value",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_sum_to_be_between",
+      "kwargs": {
+        "column": "wau",
+        "min_value": 140000000
+      },
+      "meta": {
+        "notes": {
+          "content": "Columns sum should be above certain value",
+          "format": "markdown"
+        }
+      }
+    },
+    {
+      "expectation_type": "expect_column_sum_to_be_between",
+      "kwargs": {
+        "column": "mau",
+        "min_value": 200000000
+      },
+      "meta": {
+        "notes": {
+          "content": "Columns sum should be above certain value",
+          "format": "markdown"
+        }
+      }
+    }
+   ],
+  "ge_cloud_id": null,
+  "meta": {
+    "great_expectations_version": "0.15.8"
+  }
+}
